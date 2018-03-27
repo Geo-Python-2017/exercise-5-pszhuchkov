@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 The script presents some information about the input csv file.
+Then the script chooses certain columns and delete rows that contains NaN-values.
+Furthermore happens converting Fahrenheit temperatures to Celsius into new comumn.
+Then the dataFrame divides to two parts for every observation station.  
 
 Author: Pavel Zhuchkov - 27.03.2018
 """
@@ -37,6 +40,43 @@ selected = selected.dropna(subset=['TEMP'])
 # Convert the Celsius values into integers
 selected['Celsius'] = ((selected['TEMP'] - 32) / 1.8).round(0).astype(int)
 
-# Output result
-print(selected)
+# Select all rows from selected DataFrame into variable called kumpula
+kumpula = selected.ix[selected['USAF']==29980]
+
+#Select all rows from selected DataFrame into variable called rovaniemi
+rovaniemi = selected.ix[selected['USAF']==28450]
+
+# Save kumpula DataFrame into csv file
+kumpula.to_csv('Kumpula_temps_May_Aug_2017.csv',sep=',',float_format="%.2f")
+
+# Save rovaniemi DataFrame into csv file
+rovaniemi.to_csv('Rovaniemi_temps_May_Aug_2017.csv',sep=',',float_format="%.2f")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
