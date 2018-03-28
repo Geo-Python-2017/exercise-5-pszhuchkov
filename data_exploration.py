@@ -35,6 +35,9 @@ print('\nThe amount of the unique stations is',len(data['USAF'].unique()))
 # Select columns
 selected = data[['USAF','YR--MODAHRMN','TEMP','MAX','MIN']]
 
+# Reset index for new dataframe
+selected = selected.reset_index(drop=True)
+
 # Remove all rows from selected that has NoData in column TEMP
 selected = selected.dropna(subset=['TEMP'])
 
@@ -45,9 +48,13 @@ selected['Celsius'] = ((selected['TEMP'] - 32) / 1.8).round(0).astype(int)
 
 # Select all rows from selected DataFrame into variable called kumpula
 kumpula = selected.ix[selected['USAF']==29980]
+# Drop index
+kumpula = kumpula.reset_index(drop=True)
 
 #Select all rows from selected DataFrame into variable called rovaniemi
 rovaniemi = selected.ix[selected['USAF']==28450]
+# Drop index
+rovaniemi = rovaniemi.reset_index(drop=True)
 
 # Save kumpula DataFrame into csv file
 kumpula.to_csv('Kumpula_temps_May_Aug_2017.csv',sep=',',float_format="%.2f")
@@ -74,15 +81,25 @@ print('\n The mean temperature for May in Helsinki Kumpula is',round(kumpula_may
 print('\n The mean temperature for June in Helsinki Kumpula is',round(kumpula_june['TEMP'].mean(),2), ', in Rovaniemi is',round(rovaniemi_june['TEMP'].mean(),2))
 
 # Output min temperatures for May and June in Helsinki Kumpula and Rovaniemi
-print('\n The minimal temperature for May in Helsinki Kumpula is',kumpula_may['TEMP'].min(), ', in Rovaniemi is',rovaniemi_may['TEMP'].min())
-print('\n The minimal temperature for June in Helsinki Kumpula is',kumpula_june['TEMP'].min(), ', in Rovaniemi is',rovaniemi_june['TEMP'].min())
+print('\n The minimum temperature for May in Helsinki Kumpula is',kumpula_may['TEMP'].min(), ', in Rovaniemi is',rovaniemi_may['TEMP'].min())
+print('\n The minimum temperature for June in Helsinki Kumpula is',kumpula_june['TEMP'].min(), ', in Rovaniemi is',rovaniemi_june['TEMP'].min())
 
 # Output max temperatures for May and June in Helsinki Kumpula and Rovaniemi
-print('\n The maximal temperature for May in Helsinki Kumpula is',kumpula_may['TEMP'].max(), ', in Rovaniemi is',rovaniemi_may['TEMP'].max())
-print('\n The maximal temperature for June in Helsinki Kumpula is',kumpula_june['TEMP'].max(), ', in Rovaniemi is',rovaniemi_june['TEMP'].max())
+print('\n The maximum temperature for May in Helsinki Kumpula is',kumpula_may['TEMP'].max(), ', in Rovaniemi is',rovaniemi_may['TEMP'].max())
+print('\n The maximum temperature for June in Helsinki Kumpula is',kumpula_june['TEMP'].max(), ', in Rovaniemi is',rovaniemi_june['TEMP'].max())
 
+# Add date column
+selected['YR--MODA'] = (selected['YR--MODAHRMN'] / 10000).astype(int)
+#rovaniemi['YR--MODA'] = (rovaniemi['YR--MODAHRMN'] / 10000).astype(int)
 
+# Group by date and calculate mean, maximum, minimum temperatures for every day
+selected_station_date = selected.groupby(['USAF','YR--MODA']).TEMP.agg(['mean', 'max', 'min'])
 
+# Round mean values
+selected_station_date['mean'] = selected_station_date['mean'].round(2)
+
+# Output the aggregated dataframe
+print(selected_station_date)
 
 
 
