@@ -139,6 +139,8 @@ Hence, use the information above to discuss shortly about following questions (j
 - Is Rovaniemi much colder place than Kumpula?
 
 ***Write your answers below here:***
+- Yeah. There is large difference in temperatures between May and June.
+- Rovaniemi is much colder place than Kumpula.
 
 ## Problem 5 (optional) - Parse daily temperatures
 
